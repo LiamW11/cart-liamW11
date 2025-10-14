@@ -1,0 +1,18 @@
+Shopping Cart
+========================
+
+metoder/funktion:
+AddItem(item), AddToCart(product), Add(item)
+RemoveFromCart(product), RemoveFromCart(productID)
+GetProducts(), GetProduct(productId)
+
+State:
+Cart
+- items, products []
+
+Product
+-id
+-price
+-name
+-description
+

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Day 1: Shopping Cart Logic</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f5f5f5;
+      }
+
+      h1 {
+        color: #333;
+        text-align: center;
+      }
+
+      .container {
+        background: white;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .instructions {
+        background: #e3f2fd;
+        padding: 20px;
+        border-radius: 4px;
+        margin-bottom: 20px;
+        border-left: 4px solid #2196f3;
+      }
+
+      .test-section {
+        margin: 20px 0;
+        padding: 15px;
+        background: #f9f9f9;
+        border-radius: 4px;
+      }
+
+      button {
+        background: #2196f3;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+        margin: 5px;
+        font-size: 14px;
+      }
+
+      button:hover {
+        background: #1976d2;
+      }
+
+      .console-output {
+        background: #263238;
+        color: #aed581;
+        padding: 15px;
+        border-radius: 4px;
+        font-family: "Courier New", monospace;
+        font-size: 12px;
+        margin-top: 10px;
+        max-height: 400px;
+        overflow-y: auto;
+      }
+
+      .warning {
+        background: #fff3cd;
+        border-left: 4px solid #ffc107;
+        padding: 15px;
+        margin: 15px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Day 1: Shopping Cart Logic</h1>
+
+      <div class="instructions">
+        <h2>Instructions</h2>
+        <p>
+          <strong>IMPORTANT:</strong> Press <kbd>F12</kbd> to open Developer
+          Console - that's where you'll see test results!
+        </p>
+        <p>
+          Complete the functions in <code>cart.js</code> following the TODOs.
+        </p>
+        <p>
+          Refresh the page after each function to see tests turn from ✗ FAIL to
+          ✓ PASS.
+        </p>
+      </div>
+
+      <div class="warning">
+        <strong>Tests run automatically!</strong> Open DevTools Console (F12) to
+        see detailed test results. The console output below shows basic logging
+        only.
+      </div>
+
+      <div class="test-section">
+        <h3>Manual Testing (Optional)</h3>
+        <button onclick="manualTestAdd()">Add Laptop</button>
+        <button onclick="manualTestAdd2()">Add 2 Mice</button>
+        <button onclick="manualTestIncrease()">Increase Laptop</button>
+        <button onclick="manualTestRemove()">Remove Mouse</button>
+        <button onclick="manualDisplayCart()">Show Cart</button>
+        <button onclick="clearConsole()">Clear Console</button>
+      </div>
+
+      <div class="console-output" id="console-output">
+        <div>Console output will appear here...</div>
+        <div>Open the browser console (F12) for full details.</div>
+      </div>
+    </div>
+
+    <script src="cart.js"></script>
+    <script src="test-cart.js"></script>
+    <script>
+      // Console override to show in page
+      const consoleOutput = document.getElementById("console-output");
+      const originalLog = console.log;
+      const originalClear = console.clear;
+
+      console.log = function (...args) {
+        originalLog.apply(console, args);
+        const message = args
+          .map((arg) =>
+            typeof arg === "object" ? JSON.stringify(arg, null, 2) : arg
+          )
+          .join(" ");
+        consoleOutput.innerHTML += message + "\n";
+        consoleOutput.scrollTop = consoleOutput.scrollHeight;
+      };
+
+      console.clear = function () {
+        originalClear.apply(console);
+        consoleOutput.innerHTML = "";
+      };
+
+      function clearConsole() {
+        consoleOutput.innerHTML = "<div>Console cleared...</div>";
+      }
+
+      // Manual test functions (for interactive testing)
+      function manualTestAdd() {
+        cart = [];
+        addToCart(products.laptop, 1);
+      }
+
+      function manualTestAdd2() {
+        addToCart(products.mouse, 2);
+      }
+
+      function manualTestIncrease() {
+        increaseQuantity(1);
+      }
+
+      function manualTestRemove() {
+        removeFromCart(2);
+      }
+
+      function manualDisplayCart() {
+        displayCart();
+      }
+    </script>
+  </body>
+</html>
