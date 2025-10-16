@@ -2,8 +2,12 @@
 // TODO: Complete the functions below to create interactive cart interface
 
 const element = document.getElementById("cart-totals");
+  let subtotal = 0;
+  let tax = 0;
+  let total = 0;
+  let totalItems = 0;
 
-function displayCart() {
+  function displayCart(){
   const cartContainer = document.getElementById("cart-section");
   cartContainer.innerHTML = "";
   if (cart.length === 0) {
@@ -51,7 +55,7 @@ function increaseQuantity(productId) {
   if (product) {
     product.quantity++;
     displayCart();
-    console.log(`Increased quantity of ${item.name} by 1`);
+    console.log(`Increased quantity of ${product.name} by 1`);
   }
 }
 
@@ -82,6 +86,7 @@ function confirmRemove(productId) {
     if (window.confirm(`Remove ${product.name} from cart?`)) {
       removeFromCart(productId);
       console.log(`Removed ${product.name} from cart`);
+      displayCart();
     }
   }
 }
@@ -125,31 +130,94 @@ function proceedToCheckout() {
   if (cart.length === 0) {
     alert("Cart is empty!");
     return;
+  } else{
+  showCheckoutSummary();
   }
-  let subtotal = calculateSubtotal();
-  let tax = subtotal * 0.08;
-  let total = tax + subtotal;
-  let totalItems = getTotalItems();
-  if (
-    window.confirm(
-      `Checkout? 
-      Amount of items: ${totalItems} 
-      Price of items: ${subtotal.toFixed(2)}$ 
-      Tax: ${tax.toFixed(2)}$ 
-      Amount to pay: ${total.toFixed(2)}$
-      `
-    )
-  )
-    cart = [];
+}
+
+function showCheckoutSummary() {
+  document.getElementById("hiddenDiv").style.display = "block";
+  document.getElementById("overlay").style.display = "block";
+
+  subtotal = calculateSubtotal();
+  tax = subtotal * 0.08;
+  total = tax + subtotal;
+  totalItems = getTotalItems();
+
+  document.getElementById("summary-items").innerText = `Total items: ${totalItems}`;
+  document.getElementById("summary-subtotal").innerText = `Subtotal: $${subtotal.toFixed(2)}`;
+  document.getElementById("summary-tax").innerText = `Tax (8%): $${tax.toFixed(2)}`;
+  document.getElementById("summary-total").innerText = `Total: $${total.toFixed(2)}`;
+}
+
+function hideCheckoutSummary() {
+  document.getElementById("hiddenDiv").style.display = "none";
+  document.getElementById("overlay").style.display = "none";
+}
+
+function confirmCheckout(){
+   const purchase = {
+    name: document.getElementById("name").value,
+    email: document.getElementById("email").value,
+    address: document.getElementById("address").value,
+    cart: cart
+  };
+
+  localStorage.setItem(`Purchase ID:${Date.now()}`, JSON.stringify(purchase));
+  cart = [];
   displayCart();
-  {
-    alert("Purchase successful!");
-    console.log(
-      `Amount of items: ${totalItems}, Price of items: ${subtotal.toFixed(
-        2
-      )}$, Tax: ${tax.toFixed(2)}$, Amount to pay: ${total.toFixed(2)}$`
-    );
+  hideCheckoutSummary();
+}
+
+
+function viewShoppingHistory() {
+  const cartContainer = document.getElementById("cart-section");
+  cartContainer.innerHTML = "<h2>Purchase History</h2>";
+  
+  // Samla alla purchases i en array för att kunna sortera
+  const purchases = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key.startsWith('Purchase ID:')) {
+      const value = localStorage.getItem(key);
+        const parsed = JSON.parse(value);
+        purchases.push({ key, data: parsed });
+    }
   }
+  
+  // Sortera så nyast kommer först (Purchase#3, #2, #1)
+  purchases.sort((a, b) => {
+    const numA = parseInt(a.key.replace('Purchase ID:', ''));
+    const numB = parseInt(b.key.replace('Purchase ID:', ''));
+    return numB - numA;
+  });
+  
+  // Visa varje purchase
+  purchases.forEach(purchase => {
+    const postDiv = document.createElement('div');
+    postDiv.className = 'history-post';
+    
+    let cartItemsHTML = "";
+    if (purchase.data.cart && purchase.data.cart.length > 0) {
+      cartItemsHTML = purchase.data.cart.map(item => `
+        <div class="cart-item">
+          <strong>${item.name}</strong> 
+          <p>${item.price}$</p> 
+          <p>(Quantity: ${item.quantity})</p>
+          <p>Subtotal: ${(item.price * item.quantity).toFixed(2)}$</p>
+          <p>Total (8% tax): ${((item.price * 1.08) * item.quantity).toFixed(2)}$</p>
+        </div>
+      `).join('');
+    }
+    
+    postDiv.innerHTML = `
+      <h3>${purchase.key}</h3>
+      ${cartItemsHTML}
+      <hr>
+    `;
+    
+    cartContainer.appendChild(postDiv);
+  });
 }
 
 window.addEventListener("load", () => {

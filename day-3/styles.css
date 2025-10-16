@@ -10,7 +10,7 @@
 }
 
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   min-height: 100vh;
   padding: 20px;
@@ -331,17 +331,13 @@ button:hover {
   color: #28a745;
 }
 
-.quantity-button{
+.quantity-button {
   color: black;
   text-align: center;
   font-size: 1rem;
 }
 
-#cart-title{
-  margin-top: 1rem;
-}
-
-.clear-btn{
+#cart-title {
   margin-top: 1rem;
 }
 
@@ -405,7 +401,8 @@ button:hover {
   cursor: not-allowed;
 }
 
-.clear-btn {
+.clear-btn,
+.history-btn {
   background: #6c757d;
   color: white;
   border: none;
@@ -413,10 +410,111 @@ button:hover {
   border-radius: 4px;
   cursor: pointer;
   margin-right: 10px;
+  margin-top: 1rem;
 }
 
 .clear-btn:hover {
   background: #5a6268;
+}
+
+/*MODAL STYLING*/
+#hiddenDiv {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  color: black;
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  z-index: 9999;
+  min-width: 300px;
+  text-align: center;
+}
+
+#overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 9998;
+}
+
+#content-container {
+  display: flex;
+}
+
+#contactForm{
+  margin-top: 0.5rem;
+  text-align: left;
+  padding: 1rem;
+  font-size: 1.2rem;
+  float: left;
+}
+
+#order-summary{
+  margin-top: 0.5rem;
+  text-align: left;
+  padding: 1rem;
+  font-size: 1.2rem;
+  float: right;
+}
+
+#name,
+#email,
+#address{
+  font-size: 1.5rem;
+  width: 100%;
+  padding: 1rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+#confirm-btn {
+  background: #35c051;
+  color: white;
+  border: none;
+  padding: 1rem, 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1.5rem;
+  transition: background 0.3s;
+}
+
+#confirm-btn:hover {
+  background: #249342;
+}
+
+.cancel-btn {
+  background: rgb(219, 92, 92);
+  font-size: 1.5rem;
+  margin-top: 1rem;
+  padding: 1rem, 1.5rem;
+  transition: background 0.3s;
+}
+
+.cancel-btn:hover {
+  background: rgb(209, 36, 36);
+}
+
+.history-post {
+  background: #f5f5f5;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+}
+
+.history-post pre {
+  background: white;
+  padding: 10px;
+  overflow-x: auto;
 }
 
 /* Console Output */
@@ -425,7 +523,7 @@ button:hover {
   color: #d4d4d4;
   padding: 20px;
   border-radius: 8px;
-  font-family: 'Courier New', monospace;
+  font-family: "Courier New", monospace;
   font-size: 14px;
   max-height: 300px;
   overflow-y: auto;
@@ -482,23 +580,22 @@ button:hover {
 }
 
 .loading::after {
-  content: '...';
+  content: "...";
   animation: loading 1.5s infinite;
 }
 
 @keyframes loading {
-
   0%,
   20% {
-    content: '.';
+    content: ".";
   }
 
   40% {
-    content: '..';
+    content: "..";
   }
 
   60%,
   100% {
-    content: '...';
+    content: "...";
   }
 }
