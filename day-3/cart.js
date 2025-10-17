@@ -25,6 +25,7 @@ function addToCart(product, quantity = 1) {
           product.stock - currentQuantity
         } available.`
       );
+      alert("Stock limit reached!");
       return;
     }
   }

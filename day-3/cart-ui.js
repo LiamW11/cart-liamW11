@@ -52,10 +52,12 @@ const element = document.getElementById("cart-totals");
 function increaseQuantity(productId) {
   const product = cart.find((item) => item.id === productId);
 
-  if (product) {
+  if (product.quantity < getProductStock(productId)) {
     product.quantity++;
     displayCart();
     console.log(`Increased quantity of ${product.name} by 1`);
+  } else {
+    alert("Stock limit reached!");
   }
 }
 
@@ -74,6 +76,11 @@ function decreaseQuantity(productId) {
       confirmRemove(productId);
     }
   }
+}
+
+function getProductStock(productId) {
+  const product = products.find((p) => p.id === productId);
+  return product ? product.stock : 0;
 }
 
 /**
@@ -169,7 +176,6 @@ function confirmCheckout(){
   hideCheckoutSummary();
 }
 
-
 function viewShoppingHistory() {
   const cartContainer = document.getElementById("cart-section");
   cartContainer.innerHTML = "<h2>Purchase History</h2>";
@@ -179,9 +185,8 @@ function viewShoppingHistory() {
   for (let i = 0; i < localStorage.length; i++) {
     const key = localStorage.key(i);
     if (key.startsWith('Purchase ID:')) {
-      const value = localStorage.getItem(key);
-        const parsed = JSON.parse(value);
-        purchases.push({ key, data: parsed });
+      const value = JSON.parse(localStorage.getItem(key));
+        purchases.push({ key, data: value });
     }
   }
   
